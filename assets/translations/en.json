@@ -3432,6 +3432,14 @@
           "description": "Tint the custom image with the widget Icon Color setting",
           "label": "Colorize Custom Image"
         },
+        "data-command": {
+          "description": "Shell command re-run every \"Data Command Interval\" seconds; its stdout must be a JSON object with optional text/icon/tooltip/color/icon_color/text_color fields that override this widget's label, glyph, tooltip, and colors while set",
+          "label": "Data Command"
+        },
+        "data-command-interval": {
+          "description": "How often to re-run the data command, in seconds",
+          "label": "Data Command Interval"
+        },
         "detached-panel": {
           "description": "Open the drawer as a floating panel instead of anchoring it to the bar edge",
           "label": "Detached Panel"

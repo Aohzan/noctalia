@@ -14,6 +14,8 @@ Shows a custom glyph/image and an optional label. What it does on click and scro
 | `custom_image_colorize` | bool | `false` | When `true`, tint the custom image with the widget icon color |
 | `label` | string | `""` | Optional text label shown next to the glyph or image |
 | `tooltip` | string | `""` | Optional hover tooltip |
+| `data_command` | string | `""` | Shell command re-run every `data_command_interval` seconds. Its stdout must be a JSON object; see below |
+| `data_command_interval` | number | `3.0` | How often to re-run `data_command`, in seconds |
 
 ```toml
 [widget.quick-action]
@@ -25,4 +27,36 @@ label = "Action"
 [widget.quick-action.actions]
 left = "exec notify-send Noctalia"
 right = "exec notify-send 'Other action'"
+```
+
+## Data command
+
+Set `data_command` to a shell command whose output overrides the widget's appearance. The
+command is re-run every `data_command_interval` seconds; its stdout must be a JSON object with
+any of these optional string fields:
+
+| Field | Description |
+|-------|-------------|
+| `text` | Overrides `label` |
+| `icon` | Overrides `glyph`. Ignored when `custom_image` is set |
+| `tooltip` | Overrides `tooltip` |
+| `color` | Overrides both the icon and label color. A [color role](/noctalia/theming/palette/#color-roles) or fixed hex color (`#RGB`, `#RGBA`, `#RRGGBB`, `#RRGGBBAA`) |
+| `icon_color` | Overrides only the icon color. Same format as `color`; takes precedence over `color` for the icon |
+| `text_color` | Overrides only the label color. Same format as `color`; takes precedence over `color` for the label |
+
+A field that is missing or the wrong JSON type falls back to the widget's static config for that
+field. Output that is not a JSON object is ignored, and the widget keeps showing its last good
+state.
+
+```toml
+[widget.cpu-status]
+type = "custom_button"
+glyph = "cpu"
+label = "…"
+data_command = "cpu-status --json"
+data_command_interval = 5
+```
+
+```json
+{ "text": "42%", "icon": "cpu", "tooltip": "CPU load: 42%", "color": "primary" }
 ```
